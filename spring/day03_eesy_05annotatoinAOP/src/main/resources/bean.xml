@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--    xsi:schemaLocation后面跟的应该是约束.-->
+
+    <context:component-scan base-package="com.myj"></context:component-scan>
+<!-- 开启注解aop的支持-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+<!--    完全不使用注解的方式,在配置类前面加上一下内容,并在在ConfigurableApplicationContext导入配置类-->
+<!--
+@Configuration
+@ComponentScan("com.myj")
+@EnableAspectJAutoProxy
+-->
+</beans>

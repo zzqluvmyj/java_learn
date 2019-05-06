@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+<!--    配置spring的ioc-->
+    <bean id="accountService" class="com.myj.service.impl.AccountService"></bean>
+
+<!--    spring中基于xml的aop配置步骤
+            1.把通知类配置进来
+            2.使用aop:config表面开始aop的配置
+            3.使用aop:aspect表示配置切面
+                id给切面的唯一标识
+                ref指定通知类的id
+            4.在aop:aspect内部使用标签配置通知的类型
+                method指定哪个方法是前置通知.
+                pointcut:指定对哪个切入点表达式增强
+
+            切入点表达式的写法:
+                访问修饰符可以省略.
+                    void com.myj.service.impl.AccountService.saveAccount()
+                返回值可以使用通配符,表示任意返回值.
+                    * com.myj.service.impl.AccountService.saveAccount()
+                包名可以使用通配符,表示任意包,但是有几个包,就要写几个*
+                    比如:* *.*.*.*.AccountService.saveAccount()
+                包名可以使用..表示当前包和子包.
+                    * *..AccountService.saveAccount()
+                方法名和类名都可以使用*表示通配
+                    * *..*.saveAccount()
+                    * *..*.*()
+                直接写数据类型:
+                全通配写法:* *..*.*(..)
+-->
+    <bean id="logger" class="com.myj.utils.Logger"></bean>
+
+    <aop:config>
+<!--        配置切面-->
+        <aop:aspect id="logAdvice" ref="logger">
+<!--            配置通知的类型,并且建立建立通知方法和切入点之间的关联-->
+<!--            <aop:before method="printLog" pointcut="execution(public void com.myj.service.impl.AccountService.saveAccount())"></aop:before>-->
+            <aop:before method="printLog" pointcut="execution(* *..*.*(int))"></aop:before>
+
+        </aop:aspect>
+    </aop:config>
+</beans>

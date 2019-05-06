@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--
+        spring依赖注入
+            IOC作用：降低依赖
+        依赖关系的管理：
+            spring
+        依赖关系的维护：
+            依赖注入
+        能注入的数据有三种：
+            基本类型
+            其他bean类型
+            复杂类型、集合类型
+        注入方式，三种
+            1.构造函数,constructor-arg
+            2.set方法,property
+            3.注解
+    -->
+    <!--
+            构造函数注入,constructor-arg
+            其中有属性:
+                type
+                index
+                name
+                value
+                ref:引用关联的bean
+    -->
+    <bean id="day" class="java.util.Date">
+    </bean>
+    <bean id="accountService" class="com.myj.service.impl.AccountServiceImpl">
+        <constructor-arg name="name" value="tom">
+
+        </constructor-arg>
+        <constructor-arg name="age" value="10">
+
+        </constructor-arg>
+        <constructor-arg name="birthday" ref="day">
+
+        </constructor-arg>
+    </bean>
+
+<!--        set方法注入,name是set函数后面的名称小写,不管实际的变量名称-->
+    <bean id="accountService2" class="com.myj.service.impl.AccountServiceImpl">
+        <property name="name" value="tom">
+        </property>
+        <property name="age" value="30">
+        </property>
+    </bean>
+
+<!--        复杂类型的set注入
+            结构相同的,标签可以互换
+            list=array=set
+            map=props
+-->
+    <bean id="accountService3" class="com.myj.service.impl.AccountServiceImpl">
+        <property name="myList">
+            <list>
+                <value>1111</value>
+                <value>2222</value>
+                <value>3333</value>
+            </list>
+        </property>
+        <property name="myMap">
+            <props>
+                <prop key="zzzz">fdsgg</prop>
+                <prop key="333">fd33sgg</prop>
+                <prop key="zz">11</prop>
+            </props>
+        </property>
+        <property name="myProps">
+            <map>
+                <entry key="aaaa" value="aaaa"></entry>
+                <entry key="bbbb" value="aaaa"></entry>
+                <entry key="cccc" value="aaaa"></entry>
+            </map>
+        </property>
+        <property name="mySet">
+            <set>
+                <value>1111</value>
+                <value>2222</value>
+                <value>3333</value>
+            </set>
+        </property>
+        <property name="myStrs">
+            <array>
+                <value>1111</value>
+                <value>2222</value>
+                <value>3333</value>
+            </array>
+        </property>
+    </bean>
+
+</beans>
