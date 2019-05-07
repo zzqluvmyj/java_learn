@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        https://www.springframework.org/schema/beans/spring-beans.xsd">
-
-<!--    配置代理的service,以下的两个加起来会创建IAccountService类型的bean,IAccountService类型的bean不唯一,不能使用@AutoWired-->
-    <bean id="proxyAccountService" factory-bean="beanFactory" factory-method="getAccountService">
-    </bean>
-    <bean id="beanFactory" class="com.myj.factory.BeanFactory">
-        <property name="accountService" ref="accountService"></property>
-        <property name="txManager" ref="txManager"></property>
-    </bean>
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
     <!--    配置service-->
@@ -34,7 +29,7 @@
     <!--    配置数据源-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <!--        连接数据库的内部信息-->
-        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"></property>
         <property name="jdbcUrl"
                   value="jdbc:mysql://127.0.0.1:3306/eesy?useUnicode=true&amp;serverTimezone=UTC&amp;characterEncoding=utf8">
         </property>
@@ -49,4 +44,15 @@
     <bean id="txManager" class="com.myj.utils.TransactionManager">
         <property name="connectionUtils" ref="connectionUtils"></property>
     </bean>
+
+<!--    配置aop-->
+    <aop:config>
+        <aop:pointcut id="pt1" expression="execution(* com.myj.service.impl.*.*(..))"></aop:pointcut>
+        <aop:aspect id="txAdvice" ref="txManager">
+            <aop:before method="begin" pointcut-ref="pt1"></aop:before>
+            <aop:after-returning method="commit" pointcut-ref="pt1"></aop:after-returning>
+            <aop:after-throwing method="rollback" pointcut-ref="pt1"></aop:after-throwing>
+            <aop:after method="release" pointcut-ref="pt1"></aop:after>
+        </aop:aspect>
+    </aop:config>
 </beans>
